@@ -25,4 +25,13 @@ module.exports = {
         favicon: path.resolve(__dirname, 'src', 'assets', 'scissors.svg')
     })
 ],
-}
+
+module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
+            },
+        ],
+},
+};
