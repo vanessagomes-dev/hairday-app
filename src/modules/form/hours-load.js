@@ -1,49 +1,42 @@
 import dayjs from "dayjs";
 import { openingHours } from "../../utils/opening-hours.js";
+import { hoursClick } from "./hours-click.js";
 
-const hours = document.getElementById("hours")
+const hours = document.getElementById("hours");
 
 export function hoursLoad({ date }) {
+  hours.innerHTML = ""; // limpa antes de renderizar novamente
+
   const opening = openingHours.map((hour) => {
-    //Recupera somente a hora.
     const [scheduleHour] = hour.split(":");
 
-    //Adiciona a hora na data e verifica se está no passado.
-    const isHourPast = dayjs(date).hour(scheduleHour, "hour").isAfter(dayjs())
+    // Verifica se o horário ainda está por vir (disponível)
+    const isAvailable = dayjs(date).hour(scheduleHour).isAfter(dayjs());
 
-    return ({
-        hour,
-        available: isHourPast,
-    })
+    return { hour, available: isAvailable };
+  });
 
-  })
+  opening.forEach(({ hour, available }) => {
+    // Adiciona cabeçalho de período conforme a hora
+    if (hour === "9:00") hourHeaderAdd("Manhã");
+    if (hour === "13:00") hourHeaderAdd("Tarde");
+    if (hour === "18:00") hourHeaderAdd("Noite");
 
-  //Renderiza os horários.
-  opening.forEach(({hour, available}) => {
-    const li = document.createElement("li")
+    // Cria o item de horário
+    const li = document.createElement("li");
+    li.classList.add("hour", available ? "hour-available" : "hour-unavailable");
+    li.textContent = hour;
 
-    li.classList.add("hour")
-    li.classList.add(available ? "hour-available" : "hour-unavailable")
+    hours.append(li);
+  });
 
-    li.textContent = hour
-
-    if(hour === "9:00"){
-      hourHeaderAdd("Manhã")
-    }else if(hour === "13:00"){
-      hourHeaderAdd("Tarde")
-    }else if(hour === "18:00"){
-      hourHeaderAdd("Noite")
-    }
-    
-    hours.append(li)
-
-   
-})
+  // Adiciona os eventos de clique nos horários disponíveis
+  hoursClick();
 }
 
 function hourHeaderAdd(title) {
-  const header = document.createElement("li")
-  header.classList.add("hour-period")
-  header.textContent = title
-  hours.append(header)
+  const header = document.createElement("li");
+  header.classList.add("hour-period");
+  header.textContent = title;
+  hours.append(header);
 }
