@@ -5,6 +5,8 @@ import { schedulesDay } from "../schedules/load.js"
 const form = document.querySelector("form");
 const clientName = document.getElementById("client");
 const selectedDate = document.getElementById("date");
+
+// Date atual para formatar o input.
 const inputToday = dayjs(new Date()).format("YYYY-MM-DD");
 
 //Carrega data atual e defini a data min
@@ -31,7 +33,7 @@ form.onsubmit = async (event) => {
     }
 
     // Recuperar somente a hora.
-    const [hour, minute = "0"] = hourSelected.innerText.split(":");
+    const [hour] = hourSelected.innerText.split(":");
 
     // Insere a hora na data.
     const when = dayjs(selectedDate.value).add(hour, "hour");
