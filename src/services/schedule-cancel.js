@@ -5,8 +5,9 @@ export async function scheduleCancel({ id }) {
     const response = await fetch(`${apiConfig.baseURL}/schedules/${id}`, {
       method: "DELETE",
     });
-    if (!response.ok) throw new Error("Falha ao deletar");
+ 
     alert("Agendamento cancelado com sucesso!");
+
   } catch (error) {
     console.log(error);
     alert("Não foi possível cancelar o agendamento.");
