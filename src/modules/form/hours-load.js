@@ -9,17 +9,16 @@ export function hoursLoad({ date, dailySchedules }) {
 
   // Obtem a lista de  horários ocupados.
   const unavailableHours = dailySchedules.map((schedule) =>
-    dayjs(schedule.when).format("H:mm")
+    dayjs(schedule.when).format("HH:mm")
   );
 
   const opening = openingHours.map((hour) => {
     const [scheduleHour] = hour.split(":");
 
     // Adiciona a hora na data e verifica se esta no passado.
-    const isHourPast = dayjs(date).add(scheduleHour).isBefore(dayjs())
+    const isHourPast = dayjs(date).hour(Number(scheduleHour)).isBefore(dayjs());
 
-    const available = !unavailableHours.includes(hour) || !isHourPast
-   
+    const available = !unavailableHours.includes(hour) && !isHourPast;
 
     return {
       hour,
